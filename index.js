@@ -7,6 +7,9 @@ try {
 } catch (_) {}
 
 let win;
+let openedFilePath;
+
+
 const createWindow = () => {
     win = new BrowserWindow({
     width: 800,
@@ -21,9 +24,6 @@ const createWindow = () => {
   win.setMenu(null)
   win.loadFile("index.html");
 };
-
-
-
 
 app.whenReady().then(() => {
   createWindow();
@@ -47,6 +47,7 @@ ipcMain.on("create-document", () => {
                 console.log(error)
             } else {
                 win.webContents.send('document-created', filePath)
+                openedFilePath = filePath;
             }
         })
     })
@@ -65,9 +66,16 @@ ipcMain.on("open-document", () => {
                 console.log(error)
             } else {
                 win.webContents.send("document-opened" , {filePath, content})
+                openedFilePath = filePath;
             }
         })
     })  
 })
 
-
+ipcMain.on("document-input-updated", (_, textAreaContent) => {
+    fs.writeFile(openedFilePath, textAreaContent, (error) => {
+        if(error) {
+            console.log(error)
+        } 
+    })
+})

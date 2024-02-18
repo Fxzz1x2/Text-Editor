@@ -25,6 +25,10 @@ window.addEventListener("DOMContentLoaded", () => {
         ipcRenderer.send("open-document")
     })
 
+    el.documentTextArea.addEventListener("input" , (e) => {
+        ipcRenderer.send("document-input-updated", e.target.value)
+    })
+
     ipcRenderer.on('document-created', (_, filePath) => {
         handleDocumentChange(filePath)
     })
@@ -32,5 +36,7 @@ window.addEventListener("DOMContentLoaded", () => {
     ipcRenderer.on('document-opened', (_, {filePath, content}) => {
         handleDocumentChange(filePath, content)
     })
+
+    
 
 })
