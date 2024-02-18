@@ -42,7 +42,6 @@ ipcMain.on("create-document", () => {
     dialog.showSaveDialog(win, {
         filters: [{name: "text files", extensions: ["txt"]}]
     }).then(({ filePath }) => {
-        console.log("file path is " + filePath);
         fs.writeFile(filePath, "", (error) => {
             if(error) { 
                 console.log(error)
@@ -52,4 +51,23 @@ ipcMain.on("create-document", () => {
         })
     })
 })
+
+
+ipcMain.on("open-document", () => {
+    dialog.showOpenDialog({
+        properties: ["openFile"],
+        filters: [{name: "text files", extensions: ["txt"]}]
+    }).then(({ filePaths }) => {
+        const filePath = filePaths[0];
+
+        fs.readFile(filePath, "utf8", (error, content) => {
+            if(error) {
+                console.log(error)
+            } else {
+                win.webContents.send("document-opened" , {filePath, content})
+            }
+        })
+    })  
+})
+
 
