@@ -81,10 +81,10 @@ ipcMain.on("open-document", () => {
     })  
 })
 
-ipcMain.on("document-input-updated", (_, textAreaContent) => {
+ipcMain.on("save-document", (_, textAreaContent) => {
     fs.writeFile(openedFilePath, textAreaContent, (error) => {
         if(error) {
             handleError()
-        } 
+        }
     })
 })
