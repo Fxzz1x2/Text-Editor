@@ -2,13 +2,18 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
 const fs = require("fs")
 
+try {
+  require('electron-reloader')(module)
+} catch (_) {}
+
 let win;
 const createWindow = () => {
     win = new BrowserWindow({
     width: 800,
     height: 800,
     webPreferences: {
-        preload: path.join(app.getAppPath(), "renderer.js")
+        preload: path.join(app.getAppPath(), "renderer.js"),
+        nodeIntegration: true
     }
   });
 
@@ -18,9 +23,7 @@ const createWindow = () => {
 };
 
 
-try {
-  require('electron-reloader')(module)
-} catch (_) {}
+
 
 app.whenReady().then(() => {
   createWindow();
@@ -37,9 +40,16 @@ app.on("window-all-closed", () => {
 
 ipcMain.on("create-document", () => {
     dialog.showSaveDialog(win, {
-        filters: [{name: "text files", extentions: ["txt"]}]
+        filters: [{name: "text files", extensions: ["txt"]}]
     }).then(({ filePath }) => {
         console.log("file path is " + filePath);
+        fs.writeFile(filePath, "", (error) => {
+            if(error) { 
+                console.log(error)
+            } else {
+                win.webContents.send('document-created', filePath)
+            }
+        })
     })
 })
 
