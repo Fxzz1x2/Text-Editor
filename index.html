@@ -1,19 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-    <meta
-      http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-<link rel="stylesheet" href="style.css">
-    <title>Text Editor</title>
-  </head
-  <body>
+<html>
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+            <title>Fxzz Text Editor</title>
+            <link rel="stylesheet" href="style.css">
+    </head>
 
-  </body>
+    <body>
+        <div class="header">
+            <p>document name will be here </p>
+            <div class="header-buttons"> 
+            <button>Some btn for later</button>
+            <button id="create-document">Create a new file</button>
+            </div>
+        </div>
+        <div class="body">
+        <textarea></textarea>
+        </div>
+    </body>
+
 </html>
